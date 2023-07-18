@@ -19,14 +19,27 @@ const userSchema = mongoose.Schema(
             }
             //must match a valid email address (look into mongoose matching validation)
         },
-        thoughts: {
-            // Array of _id values referencing the Thought model
-        },
-        friends: {
-            //array of id values referencing the User model (self reference)
-        }
+        thoughts: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'Thought'
+            }
+        ],
+        friends: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     }
 
 )
 
+userSchema.virtual('friendCount').get(() => {
+    return this.friends.length
+})
+
     
+const User = mongoose.model('User', userSchema) 
+
+module.exports = User;

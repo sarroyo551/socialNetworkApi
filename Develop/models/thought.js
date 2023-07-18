@@ -1,25 +1,42 @@
-class Thought extends Model {}
+const mongoose = require('mongoose')
+const dayjs = require('dayjs')
 
-Thought.init(
+const thoughtSchema = mongoose.Schema(
     {
         thoughtText: {
-            type: dataType.string,
-            //required
-            //must be between 1 and 280 chars
+            type: String,
+            required: true,
+            minLength: 1,
+            maxLength: 280
         },
         createdAt: {
-            //date
-            //set default value to the current timestamnp
-            //use a getter method to format the time stamp on query
+            type: Date,
+            default: Date.now,
+            get: (dateValue) => {
+               return dayjs(dateValue).format('MMM D, YYYY, h:mm a')
+            }
         },
-        username: {
-            //(the user that created this thought)
-            type: dataType.string,
-            //required
-        },
-        reactions: {
-            //(these are like replies)
-            //array of nested documents created with the 'reactionSchema' -- do i need 2 schemas?
-        }
+        username: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'Thought'
+            }
+        ],
+        reactions: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     }
+
 )
+
+thoughtSchema.virtual('friendCount').get(() => {
+    return this.friends.length
+})
+
+    
+const User = mongoose.model('User', thoughtSchema) 
+
+module.exports = User;
