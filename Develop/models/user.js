@@ -1,17 +1,22 @@
-class User extends Model {}
+const mongoose = require('mongoose')
 
-User.init(
+const userSchema = mongoose.Schema(
     {
         userName: {
-            type: DataTypes.string,
-            //unique
-            //required
-            //trimmed
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
         },
         email: {
-            type: DataTypes.string,
-            //required
-            //unique
+            type: String,
+            required: true,
+            unique: true,
+            validate: {
+                validator: (string) => {
+                    return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(string)
+                }
+            }
             //must match a valid email address (look into mongoose matching validation)
         },
         thoughts: {
@@ -21,4 +26,7 @@ User.init(
             //array of id values referencing the User model (self reference)
         }
     }
+
 )
+
+    
