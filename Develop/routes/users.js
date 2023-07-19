@@ -3,6 +3,8 @@ const Thought = require('../models/thought');
 const express = require('express');
 const router = express.Router();
 
+
+//get all users
 router.get('/', async (req, res) => { 
     try {
         const userData = await User.find().populate('thoughts').populate('friends');
@@ -13,6 +15,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+//create user
 router.post('/', async (req, res) => { 
     try {
         const userData = await User.create(
@@ -25,6 +28,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+//get user by id
 router.get('/:id', async (req, res) => { 
     try {
         const userData = await User.findById(req.params.id).populate('thoughts').populate('friends');
@@ -35,6 +39,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+//delete user
 router.delete('/:id', async (req, res) => {
     try {
         const userData = await User.findByIdAndDelete(req.params.id);
@@ -45,8 +50,9 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+//update user
 router.put('/:id', async (req, res) => {
-    
+    //learn update for users and thoughts
 })
 
 
