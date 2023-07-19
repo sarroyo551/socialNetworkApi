@@ -1,4 +1,3 @@
-const Friend = require('../models/friend');
 const express = require('express');
 const router = express.Router();
 

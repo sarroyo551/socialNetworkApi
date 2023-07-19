@@ -1,4 +1,5 @@
 const Thought = require('../models/thought');
+const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
 //get all thoughts
@@ -17,9 +18,15 @@ router.post('/', async (req, res) => {
         const thoughtData = await Thought.create(
             req.body
         );
-        res.json(thoughtData);
+        const userCollection = await User.findOneAndUpdate(
+            { _id: req.body.userId },
+            { $push: { thoughts: thoughtData._id } },
+            { new: true }
+        )
+        res.json({thoughtData, userCollection});
     }
     catch (err) { 
+        // console.log(err)
         res.status(500).json(err);
     }
 }) 
@@ -48,7 +55,17 @@ router.delete('/:id', async (req, res) => {
 
 //update Thought
 router.put('/:id', async (req, res) => {
-    //learn update for thoughts and users
+    try {
+        const thoughtData = await Thought.findByIdAndUpdate(
+            req.params.id,
+            { $set: req.body },
+            { new: true }
+        )
+        res.status(200).json(thoughtData);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
 })
 
 module.exports = router;
