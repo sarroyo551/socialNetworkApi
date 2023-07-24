@@ -42,6 +42,37 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+router.delete('/:thoughId/reactions/:reactionId', async (req, res) => {
+    try {
+        const reactionData = await Thought.findByIdAndUpdate(
+            req.params.thoughtId,
+            { $pull: { reactions: req.params.reactionId } },
+            { new: true, runValidators: true }
+        )
+        res.status(200).json(reactionData);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+})
+
+//create reaction
+router.post('/:thoughtId/reactions', async (req, res) => {
+    try {
+        const reactionData = await Thought.findByIdAndUpdate(
+            req.params.thoughtId,
+            { $push: { reactions: req.body } },
+            { new: true }
+        )
+        res.status(200).json(reactionData);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+})
+
+//delete reaction
+
 //delete Thought
 router.delete('/:id', async (req, res) => {
     try {

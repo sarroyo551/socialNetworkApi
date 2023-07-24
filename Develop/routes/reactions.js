@@ -16,7 +16,7 @@ router.post('/:thoughtId', async (req, res) => {
 })
 
 //delete reaction
-router.delete('/:thoughtId/:reactionId', async (req, res) => {
+router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
         const reactionData = await Reaction.findOneAndDelete(
             { thoughtId: req.params.thoughtId, _id: req.params.reactionId }
